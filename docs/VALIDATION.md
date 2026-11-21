@@ -15,5 +15,5 @@
 
 ### Fizikai órán
 - **Telepítés a telefonon keresztül (`192.168.130.135`):** az 1.0.0 build sikeresen felkerült (`App install succeeded`). Az első próbálkozás `Connection refused` volt (a Developer Connection nem fogadott), később sikerült.
-- **Andor visszajelzése Pebble Time 2-n:** „felül sűrűn vannak dolgok, alul meg szellős”. Erre az Emery elrendezés lejjebb került, és kérésre bekerült a töltésjelző `+`. Az új build is fel van telepítve, Andor visszajelzése még hátravan.
+- **Andor visszajelzése Pebble Time 2-n:** „felül sűrűn vannak dolgok, alul meg szellős”. Erre az Emery elrendezés lejjebb került, és kérésre bekerült a töltésjelző `+`. Az új buildet Andor a Pebble Time 2-n jóváhagyta („Jó így”).
 - **Még ellenőrzendő fizikai órán:** a valódi Néma idő (`OFF`, áthúzott harang), a rázás érzékenysége és a második tábla, a rázásos HR-mérés, a színek olvashatósága valódi kijelzőn, a Clay beállítóoldal megnyitása és mentése a telefonon, valamint a Time Round és a Round 2 elrendezés valódi órán.
