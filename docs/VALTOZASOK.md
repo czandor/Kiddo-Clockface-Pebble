@@ -1,5 +1,9 @@
 # Változások
 
+## 1.0.1 (2026-11-21)
+
+- Támogatási link (`https://czandor.hu/paypal/kiddo`) a telefonos beállítóoldal alján (`Support` szakasz, mint a Blokkban), a README-ben és a bolti leírásban.
+
 ## 1.0.0 (2026-11-21)
 
 - Első Pebble-kiadás a Fitbit Kiddo óralapból (Design & Code: Andor Czafik): Pebble Time (`basalt`), Pebble Time Round (`chalk`), Pebble Time 2 (`emery`) és Pebble Round 2 (`gabbro`).

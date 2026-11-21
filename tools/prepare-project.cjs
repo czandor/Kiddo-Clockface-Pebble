@@ -2,7 +2,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const root = path.resolve(__dirname, '../pebble');
-const version = '1.0.0';
+const version = '1.0.1';
 
 // AppMessage keys: the order gives the ids, so new keys always go to the end.
 const keys = [
@@ -227,6 +227,16 @@ const config = [
           { label: 'Metric (km)', value: '1' },
           { label: 'US (miles)', value: '2' }
         ]
+      }
+    ]
+  },
+  {
+    type: 'section',
+    items: [
+      { type: 'heading', defaultValue: 'Support' },
+      {
+        type: 'text',
+        defaultValue: 'This watchface is completely free. If you like it, you can support our work here: <a href="https://czandor.hu/paypal/kiddo">Buy us a coffee</a>'
       }
     ]
   },

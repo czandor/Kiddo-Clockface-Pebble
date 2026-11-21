@@ -5,7 +5,7 @@
   },
   {
     "type": "text",
-    "defaultValue": "Pebble Time / Time Round / Time 2 / Round 2 · 1.0.0<br>Design & Code: Andor Czafik"
+    "defaultValue": "Pebble Time / Time Round / Time 2 / Round 2 · 1.0.1<br>Design & Code: Andor Czafik"
   },
   {
     "type": "section",
@@ -472,6 +472,19 @@
             "value": "2"
           }
         ]
+      }
+    ]
+  },
+  {
+    "type": "section",
+    "items": [
+      {
+        "type": "heading",
+        "defaultValue": "Support"
+      },
+      {
+        "type": "text",
+        "defaultValue": "This watchface is completely free. If you like it, you can support our work here: <a href=\"https://czandor.hu/paypal/kiddo\">Buy us a coffee</a>"
       }
     ]
   },

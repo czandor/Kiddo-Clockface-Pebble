@@ -1,1 +1,2 @@
 01a95dbbcab2b7ad7d85cf58a05abca90221954e3cb5d18df8b5e7e34f85748c  Kiddo-1.0.0.pbw
+d1f5cab8ebdf53bff0a961f732121a1fd3fb29b3be90b22da1cf90de9e53505f  Kiddo-1.0.1.pbw

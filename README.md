@@ -6,7 +6,7 @@ A native C port of the original Fitbit **Kiddo** clockface (Design & Code: **And
 
 Playful cartoon digits and letters, every one in its own random color with a black outline and 3D shadow, a wooden health board with nails, and a colorful battery — rendered from the original Fitbit artwork.
 
-**Download latest release:** [Kiddo-1.0.0.pbw](https://github.com/czandor/Kiddo-Clockface-Pebble/releases/latest) (also in `dist/Kiddo-1.0.0.pbw` with `dist/SHA256SUMS.txt`)
+**Download latest release:** [Kiddo-1.0.1.pbw](https://github.com/czandor/Kiddo-Clockface-Pebble/releases/latest) (also in `dist/Kiddo-1.0.1.pbw` with `dist/SHA256SUMS.txt`)
 
 ## Features
 
@@ -55,3 +55,9 @@ node tools/test.cjs
 ## Credits
 
 Design & Code: Andor Czafik. The digits and letters are pre-rendered bitmaps of the original Fitbit Kiddo artwork, made with the *Agent Orange* font by Jakob Fischer (pizzadude.dk); the font file itself is not distributed.
+
+## Support
+
+This watchface is completely free. If you enjoy it and would like to support our work:
+
+[☕ Buy us a coffee](https://czandor.hu/paypal/kiddo)

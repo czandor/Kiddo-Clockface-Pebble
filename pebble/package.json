@@ -1,7 +1,7 @@
 {
   "name": "kiddo",
   "author": "Andor Czafik",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "Kiddo watchface for Pebble Time, Pebble Time Round, Pebble Time 2 and Pebble Round 2, ported from the original Fitbit clockface (Design & Code: Andor Czafik).",
   "dependencies": {

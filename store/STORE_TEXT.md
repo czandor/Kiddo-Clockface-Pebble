@@ -32,10 +32,17 @@ Kiddo brings the playful Fitbit Kiddo watchface (Design and Code: Andor Czafik) 
 ⌚ Round Displays: Dedicated layouts for Pebble Time Round (180x180) and Pebble Round 2 (260x260), with the weekday and AM/PM pulled in from the edge.
 ⚙️ Battery Friendly Offline Settings: Updates once a minute. Configure it entirely offline via Clay in the Pebble app.
 
-🧡 Kiddo is completely free.
+🧡 Kiddo is completely free. If you enjoy it, you can support our work here:
+https://czandor.hu/paypal/kiddo
 ```
 
 ---
+
+## Release Notes (`1.0.1`)
+
+```text
+🧡 Support link in the settings page.
+```
 
 ## Release Notes (`1.0.0`)
 
@@ -64,4 +71,4 @@ First release for Pebble Time, Pebble Time Round, Pebble Time 2 and Pebble Round
 
 ## Links
 - **Source / Website:** `https://github.com/czandor/Kiddo-Clockface-Pebble`
-- **Support / Donate:** még nincs megadva (a Blokké `https://czandor.hu/paypal/blokk`).
+- **Support / Donate:** `https://czandor.hu/paypal/kiddo`
