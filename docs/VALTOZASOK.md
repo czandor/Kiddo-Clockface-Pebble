@@ -14,3 +14,4 @@
 - Kerek kijelzőn 12 órás módban a nap és az `AM`/`PM` beljebb húzva.
 - Töltés közben `+` jel a százalék mögött.
 - Pebble Time 2-n a felső elemek lejjebb kerültek, a függőleges térközök egyenletesek.
+- Pebble Time 2-n és Round 2-n a véletlen színek csak a 29 élénk palettaszínből jönnek (pasztell, szürkés és sötét árnyalatok nélkül), mert az érintőréteges kijelzőjük sötétebb és fakóbb; Pebble Time-on és Time Roundon marad az eredeti 50 szín.

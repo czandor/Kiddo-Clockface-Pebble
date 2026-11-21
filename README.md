@@ -7,6 +7,7 @@ Playful cartoon digits and letters, every one in its own random color with a bla
 ## Features
 
 - **Rainbow letters:** time, weekday, AM/PM, date and battery are drawn from the original Kiddo glyphs. Every letter can get its own random color (default), one random color per text, or one fixed color.
+- **Vivid colors on Pebble Time 2 and Round 2:** their touch-layer displays look darker, so random colors come only from the 29 vivid palette entries there (all 50 Kiddo colors on Pebble Time and Time Round).
 - **Background color like Blokk:** *Choose one color*, *Random every day*, *Random every hour*, *Random every minute* (default) or *Random on wrist flick*. The random letter and board colors change together with the background.
 - **Health board with 6 slots** (3 on the main board, 3 on the second board): heart rate (Pebble Time 2), steps, active minutes, distance (km or mi), calories, sleep hours, or the vibration bell.
 - **Quiet Time indicator on screen by default:** a bell with `ON` while the watch may vibrate, a crossed bell with `OFF` while Quiet Time is active.

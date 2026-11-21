@@ -142,13 +142,25 @@ static Settings s_settings = {
 
 static ColorState s_color_state = { .seed = 1, .last_day = -1, .last_hour = -1 };
 
-// Random color pool: the Pebble palette entries enabled in the Fitbit Kiddo
-// color table (no black, white or the darkest shades). Index = 0b00rrggbb.
+// Random color pool. Index = 0b00rrggbb.
+#if defined(PBL_PLATFORM_EMERY) || defined(PBL_PLATFORM_GABBRO)
+// Pebble Time 2 and Round 2: the touch layer over the reflective panel makes
+// the picture darker and duller, so only the vivid entries are used: one
+// channel at FF and another at 00 or 55 (29 colors). Pastel, grayish and
+// dark-saturated shades are left out.
+static const uint8_t RANDOM_POOL[] = {
+  7, 11, 12, 13, 14, 15, 19, 23, 27, 28, 29, 30, 31, 35, 39, 44, 45, 48, 49, 50,
+  51, 52, 53, 54, 55, 56, 57, 60, 61
+};
+#else
+// Pebble Time and Time Round: the palette entries enabled in the Fitbit Kiddo
+// color table (no black, white or the darkest shades), 50 colors.
 static const uint8_t RANDOM_POOL[] = {
   6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 19, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
   32, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53,
   54, 55, 56, 57, 58, 59, 60, 61, 62
 };
+#endif
 #define POOL_SIZE ((int)sizeof(RANDOM_POOL))
 
 // Fixed icon colors from the Fitbit source (palette indices).

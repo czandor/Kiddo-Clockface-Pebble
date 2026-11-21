@@ -49,6 +49,27 @@ for (const w of words) {
   for (const c of w) assert.ok(smallChars.includes(c), `Glyph for "${c}" (${w}) missing`);
 }
 
+// 3b. Random color pools: vivid subset on Pebble Time 2 / Round 2, Fitbit pool elsewhere
+{
+  const pools = [...mainC.matchAll(/static const uint8_t RANDOM_POOL\[\] = \{([^}]+)\}/g)]
+    .map((m) => m[1].split(',').map((v) => parseInt(v, 10)).filter((v) => !isNaN(v)));
+  assert.equal(pools.length, 2, 'Two random pools (vivid and Fitbit)');
+  const [vivid, fitbit] = pools;
+  const ch = (i) => [(i >> 4) & 3, (i >> 2) & 3, i & 3];
+  assert.equal(vivid.length, 29, 'Vivid pool has 29 colors');
+  assert.equal(new Set(vivid).size, 29);
+  for (const i of vivid) {
+    assert.ok(Math.max(...ch(i)) === 3 && Math.min(...ch(i)) <= 1, `vivid pool entry ${i}`);
+    assert.ok(fitbit.includes(i), `vivid entry ${i} is also in the Fitbit pool`);
+  }
+  for (const i of fitbit) {
+    if (Math.max(...ch(i)) === 3 && Math.min(...ch(i)) <= 1) assert.ok(vivid.includes(i), `vivid color ${i} missing`);
+  }
+  assert.equal(fitbit.length, 50, 'Fitbit pool has 50 colors');
+  assert.ok(/#if defined\(PBL_PLATFORM_EMERY\) \|\| defined\(PBL_PLATFORM_GABBRO\)\s*\n\/\/ Pebble Time 2/.test(mainC),
+    'Vivid pool is used on emery and gabbro');
+}
+
 // 4. companion.js in a mocked Pebble environment
 const sentMessages = [];
 const listeners = {};
