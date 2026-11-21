@@ -14,6 +14,9 @@
 | `tools/build.ps1`, `tools/build.sh` | Windowsról a WSL `NineTimeSDK` buildet futtatja, a PBW-t `dist/Kiddo-<verzió>.pbw` néven menti, `SHA256SUMS.txt`-vel. |
 | `tools/test.cjs` | Manifest-, glifkészlet- és `companion.js`-tesztek (mockolt Pebble/Clay környezetben). |
 | `tools/emulator-shots.sh` | Dokumentációs képernyőképek mind a négy emulátoron (24 h, második tábla, 12 h PM és AM). |
+| `tools/store-shots.sh` | Bolti képernyőképek (`store/<platform>-01-main.png`, `-02-second-board.png`, `-03-12h.png`) valószerű egészségadatokkal, mind a négy emulátoron. |
+| `tools/make-store.py` | Bolti ikonok (80×80, 144×144) és 720×320-as banner. Az *Agent Orange* fontot (`original/font/AgentOrange.ttf`, csak helyben) használja: a font üreges, körvonalas betűi közül a betűtestet színezi ki, a lyukakat (O, D) átlátszón hagyja, ahogy a Fitbit-glifeken. A fontfájl nem kerül a repóba, csak a kész képek. |
+| `store/STORE_TEXT.md` | Bolti név, rövid és teljes leírás, kiadási jegyzet, címkék. A bolti oldal nem kezel Markdownt: a leírás emojis sorokból áll, `**` és `&` nélkül. |
 | `tools/emulator-pulse.sh` | Pulzusminta-sorozat az Emery emulátorra (a Blokkból átvéve). |
 
 Az eredeti Fitbit Kiddo forrás, a képek és a bolti képernyőképek az `original/` mappában vannak (nincs verziókezelve). Forrásuk a `C:\andor\Fitbit.7z` archívum `Fitbit/Kiddo/` mappája, ami csak olvasható referencia. Kibontása 7-Zip nélkül, a Windows saját `tar.exe`-jével:

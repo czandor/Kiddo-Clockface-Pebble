@@ -1,8 +1,12 @@
 # Kiddo — Pebble Time, Time Round, Time 2 & Round 2
 
+![Kiddo Banner](store/banner-720x320.png)
+
 A native C port of the original Fitbit **Kiddo** clockface (Design & Code: **Andor Czafik**) for **Pebble Time (`basalt`, 144×168)**, **Pebble Time Round (`chalk`, 180×180 round)**, **Pebble Time 2 (`emery`, 200×228)** and **Pebble Round 2 (`gabbro`, 260×260 round)**.
 
 Playful cartoon digits and letters, every one in its own random color with a black outline and 3D shadow, a wooden health board with nails, and a colorful battery — rendered from the original Fitbit artwork.
+
+**Download latest release:** [Kiddo-1.0.0.pbw](https://github.com/czandor/Kiddo-Clockface-Pebble/releases/latest) (also in `dist/Kiddo-1.0.0.pbw` with `dist/SHA256SUMS.txt`)
 
 ## Features
 
@@ -19,9 +23,9 @@ Playful cartoon digits and letters, every one in its own random color with a bla
 
 ## Screenshots
 
-| Pebble Time 2 | Pebble Time 2 (second board) | Pebble Time 2 (Quiet Time) | Pebble Time | Pebble Time (12h) |
+| Pebble Time 2 | Pebble Time 2 (second board) | Pebble Time 2 (real watch, Quiet Time) | Pebble Time | Pebble Time (12h) |
 | :---: | :---: | :---: | :---: | :---: |
-| ![Time 2](docs/emery-24h.png) | ![Second board](docs/emery-second-board.png) | ![Quiet Time](docs/emery-quiet-off.png) | ![Time](docs/basalt-24h.png) | ![Time 12h](docs/basalt-12h.png) |
+| ![Time 2](docs/emery-24h.png) | ![Second board](docs/emery-second-board.png) | ![Quiet Time](docs/emery-physical-board.png) | ![Time](docs/basalt-24h.png) | ![Time 12h](docs/basalt-12h.png) |
 
 | Pebble Round 2 | Pebble Round 2 (12h) | Pebble Time Round | Pebble Time Round (12h) | Pebble Time Round (second board) |
 | :---: | :---: | :---: | :---: | :---: |
@@ -33,7 +37,8 @@ Playful cartoon digits and letters, every one in its own random color with a bla
 | --- | --- |
 | `pebble/` | Native Pebble C source (`src/c/main.c`, generated `src/c/glyphs.h`), PebbleKit JS (`src/pkjs/`), offline Clay configuration and the generated glyph sprite sheets (`resources/images/`). |
 | `dist/` | Compiled `Kiddo-*.pbw` builds and `SHA256SUMS.txt`. |
-| `tools/` | Glyph generator (`make-glyphs.py`), build scripts (`build.ps1`, `build.sh`), manifest/config generator (`prepare-project.cjs`), emulator screenshot script and unit tests (`test.cjs`). |
+| `tools/` | Glyph and color generators (`make-glyphs.py`, `make-colors.py`), store art (`make-store.py`, `store-shots.sh`), build scripts (`build.ps1`, `build.sh`), manifest/config generator (`prepare-project.cjs`), emulator screenshot script and unit tests (`test.cjs`). |
+| `store/` | Appstore listing text (`STORE_TEXT.md`), banner, icons and screenshots for every platform. |
 | `docs/` | Developer handoff (`FEJLESZTES.md`), changelog (`VALTOZASOK.md`), validation notes (`VALIDATION.md`) and emulator screenshots. |
 | `original/` | Local, unversioned Fitbit Kiddo reference source and artwork. |
 
