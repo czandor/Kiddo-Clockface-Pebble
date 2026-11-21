@@ -1,0 +1,97 @@
+{
+  "name": "kiddo",
+  "author": "Andor Czafik",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Kiddo watchface for Pebble Time, Pebble Time Round, Pebble Time 2 and Pebble Round 2, ported from the original Fitbit clockface (Design & Code: Andor Czafik).",
+  "dependencies": {
+    "@rebble/clay": "1.1.0"
+  },
+  "pebble": {
+    "displayName": "Kiddo",
+    "uuid": "675d81c0-00ae-4273-92f2-546b04dcbf59",
+    "sdkVersion": "3",
+    "enableMultiJS": true,
+    "targetPlatforms": [
+      "basalt",
+      "chalk",
+      "emery",
+      "gabbro"
+    ],
+    "capabilities": [
+      "configurable",
+      "health"
+    ],
+    "watchapp": {
+      "watchface": true
+    },
+    "messageKeys": [
+      "SAVED",
+      "BG_OPTION",
+      "BG_COLOR",
+      "TEXT_MODE",
+      "TEXT_COLOR",
+      "BOARD_MODE",
+      "BOARD_COLOR",
+      "VALUE_MODE",
+      "VALUE_COLOR",
+      "SLOT1",
+      "SLOT2",
+      "SLOT3",
+      "SLOT4",
+      "SLOT5",
+      "SLOT6",
+      "SECOND_BOARD",
+      "HR_SHAKE",
+      "TAP_VIBE",
+      "VIBE_IN_QUIET",
+      "HOUR_MODE",
+      "SHOW_AMPM",
+      "DIST_UNIT"
+    ],
+    "resources": {
+      "media": [
+        {
+          "type": "bitmap",
+          "name": "KIDDO_SHEET_BASALT",
+          "file": "images/kiddo_basalt.png",
+          "memoryFormat": "2BitPalette",
+          "storageFormat": "pbi",
+          "targetPlatforms": [
+            "basalt"
+          ]
+        },
+        {
+          "type": "bitmap",
+          "name": "KIDDO_SHEET_CHALK",
+          "file": "images/kiddo_chalk.png",
+          "memoryFormat": "2BitPalette",
+          "storageFormat": "pbi",
+          "targetPlatforms": [
+            "chalk"
+          ]
+        },
+        {
+          "type": "bitmap",
+          "name": "KIDDO_SHEET_EMERY",
+          "file": "images/kiddo_emery.png",
+          "memoryFormat": "2BitPalette",
+          "storageFormat": "pbi",
+          "targetPlatforms": [
+            "emery"
+          ]
+        },
+        {
+          "type": "bitmap",
+          "name": "KIDDO_SHEET_GABBRO",
+          "file": "images/kiddo_gabbro.png",
+          "memoryFormat": "2BitPalette",
+          "storageFormat": "pbi",
+          "targetPlatforms": [
+            "gabbro"
+          ]
+        }
+      ]
+    }
+  }
+}

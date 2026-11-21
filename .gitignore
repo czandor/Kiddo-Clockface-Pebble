@@ -1,0 +1,6 @@
+/original/
+/pebble/build/
+/pebble/node_modules/
+/pebble/.lock-waf*
+*.log
+__pycache__/
