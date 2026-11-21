@@ -33,10 +33,11 @@ SMALL = {'0': (2, 21), '1': (6, 13), '2': (4, 16), '3': (5, 15), '4': (3, 19), '
          '7': (5, 15), '8': (4, 17), '9': (5, 15), 'a': (3, 20), 'b': (5, 15), 'c': (5, 15), 'd': (5, 15),
          'e': (6, 13), 'f': (6, 13), 'g': (5, 15), 'h': (4, 16), 'i': (8, 9), 'j': (4, 17), 'l': (6, 13),
          'm': (1, 23), 'n': (3, 18), 'o': (2, 21), 'p': (4, 17), 'r': (4, 17), 's': (4, 16), 't': (4, 17),
-         'u': (3, 19), 'v': (3, 19), 'w': (1, 24), 'y': (2, 22), '.': (9, 7)}
+         'u': (3, 19), 'v': (3, 19), 'w': (1, 24), 'y': (2, 22), '.': (9, 7),
+         '+': (4, 14)}  # '+' is drawn by plus_pair() (charging mark, not in the Fitbit set)
 SMALL_BOX, SMALL_SPACER, SMALL_SPACE = 25, 1, 8
 BIG_CHARS = '0123456789:'
-SMALL_CHARS = '0123456789abcdefghijlmnoprstuvwy.'
+SMALL_CHARS = '0123456789abcdefghijlmnoprstuvwy.+'
 FILE_NAME = {':': 'ddot', '.': 'dot'}
 ICONS = ['hr', 'steps', 'active', 'distance', 'calories', 'sleep', 'bell', 'belloff']
 ICON_FILES = {'hr': 'health/hr', 'steps': 'health/steps', 'active': 'health/activeZoneMinutes',
@@ -112,6 +113,15 @@ def new_icon(name):
     return styled_pair(m.resize((ICON_BOX * 4, ICON_BOX * 4), Image.LANCZOS))
 
 
+def plus_pair():
+    """'+' in the small glyph style: 25 px box at 4x, centered on the digits (fill y 2..22)."""
+    m = Image.new('L', (SMALL_BOX * 4, SMALL_BOX * 4), 0)
+    d = ImageDraw.Draw(m)
+    d.rounded_rectangle([16, 37, 71, 59], radius=8, fill=255)
+    d.rounded_rectangle([33, 20, 54, 76], radius=8, fill=255)
+    return styled_pair(m)
+
+
 def quantize(mask, layer, size):
     """Scale a (mask, outline layer) pair to size and classify every pixel."""
     w, h = size
@@ -151,7 +161,7 @@ def build(platform, cfg):
         off, width = metrics[ch]
         px = round(box * scale)
         prefix = 'big/' if group == 'big' else 'small/'
-        mask, layer = load_pair(prefix + FILE_NAME.get(ch, ch))
+        mask, layer = plus_pair() if ch == '+' else load_pair(prefix + FILE_NAME.get(ch, ch))
         x0, y0, cells = crop(quantize(mask, layer, (px, px)))
         tiles.append((group, ch, cells, x0 - round(off * scale), y0, round((width + spacer) * scale * 16)))
 

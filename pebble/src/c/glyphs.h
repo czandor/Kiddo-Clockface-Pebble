@@ -10,7 +10,7 @@ typedef struct {
 } KGlyph;
 
 #define BIG_CHARS "0123456789:"
-#define SMALL_CHARS "0123456789abcdefghijlmnoprstuvwy."
+#define SMALL_CHARS "0123456789abcdefghijlmnoprstuvwy.+"
 enum { ICON_HR, ICON_STEPS, ICON_ACTIVE, ICON_DISTANCE, ICON_CALORIES, ICON_SLEEP, ICON_BELL, ICON_BELLOFF, ICON_COUNT };
 enum { MISC_BATT, MISC_NAIL, MISC_BOARD, MISC_COUNT };
 
@@ -40,7 +40,7 @@ static const KGlyph GL_BIG[11] = {
   {  0,  44,  24,  34,   0,   2,  415},  // 9
   {210,  44,  11,  18,   0,  11,  200},  // :
 };
-static const KGlyph GL_SMALL[33] = {
+static const KGlyph GL_SMALL[34] = {
   {138,  79,  11,  12,   1,   1,  197},  // 0
   {128,  97,   7,  12,   1,   1,  125},  // 1
   { 20,  97,   8,  12,   1,   1,  152},  // 2
@@ -73,7 +73,8 @@ static const KGlyph GL_SMALL[33] = {
   {217,  79,  10,  12,   0,   1,  179},  // v
   { 98,  79,  13,  12,   0,   1,  224},  // w
   { 79,  79,  12,  13,   0,   1,  206},  // y
-  {152,  97,   4,   3,   0,   9,   72},  // .
+  {163,  97,   4,   3,   0,   9,   72},  // .
+  {152,  97,  10,  10,   0,   2,  134},  // +
 };
 static const KGlyph GL_ICON[8] = {
   { 59,  79,  19,  15,   1,   2,    0},  // hr
@@ -87,7 +88,7 @@ static const KGlyph GL_ICON[8] = {
 };
 static const KGlyph GL_MISC[3] = {
   { 16,  79,  25,  16,   2,   1,    0},  // batt
-  {157,  97,   3,   3,   4,   7,    0},  // nail
+  {168,  97,   3,   3,   4,   7,    0},  // nail
   {  0,   0, 137,  43,   2,   4,    0},  // board
 };
 #elif defined(PBL_PLATFORM_CHALK)
@@ -116,7 +117,7 @@ static const KGlyph GL_BIG[11] = {
   {  0,  42,  25,  36,  -1,   2,  432},  // 9
   {185,  42,  11,  19,   0,  12,  208},  // :
 };
-static const KGlyph GL_SMALL[33] = {
+static const KGlyph GL_SMALL[34] = {
   {138,  79,  11,  12,   1,   1,  197},  // 0
   {128,  97,   7,  12,   1,   1,  125},  // 1
   { 20,  97,   8,  12,   1,   1,  152},  // 2
@@ -149,7 +150,8 @@ static const KGlyph GL_SMALL[33] = {
   {217,  79,  10,  12,   0,   1,  179},  // v
   { 98,  79,  13,  12,   0,   1,  224},  // w
   { 79,  79,  12,  13,   0,   1,  206},  // y
-  {152,  97,   4,   3,   0,   9,   72},  // .
+  {163,  97,   4,   3,   0,   9,   72},  // .
+  {152,  97,  10,  10,   0,   2,  134},  // +
 };
 static const KGlyph GL_ICON[8] = {
   { 59,  79,  19,  15,   1,   2,    0},  // hr
@@ -163,7 +165,7 @@ static const KGlyph GL_ICON[8] = {
 };
 static const KGlyph GL_MISC[3] = {
   { 16,  79,  25,  16,   2,   1,    0},  // batt
-  {157,  97,   3,   3,   4,   7,    0},  // nail
+  {168,  97,   3,   3,   4,   7,    0},  // nail
   {  0,   0, 133,  41,   2,   4,    0},  // board
 };
 #elif defined(PBL_PLATFORM_EMERY)
@@ -192,7 +194,7 @@ static const KGlyph GL_BIG[11] = {
   {105,  58,  33,  47,   0,   3,  570},  // 9
   { 73, 106,  14,  25,   1,  16,  275},  // :
 };
-static const KGlyph GL_SMALL[33] = {
+static const KGlyph GL_SMALL[34] = {
   {139, 153,  14,  16,   1,   1,  253},  // 0
   {190, 174,   9,  16,   1,   1,  161},  // 1
   {213, 153,  12,  16,   0,   1,  196},  // 2
@@ -225,7 +227,8 @@ static const KGlyph GL_SMALL[33] = {
   {184, 153,  14,  16,   0,   1,  230},  // v
   { 54, 153,  18,  16,  -1,   1,  288},  // w
   { 90, 153,  16,  16,   0,   1,  265},  // y
-  {211, 174,   5,   5,   1,  11,   92},  // .
+  {225, 174,   5,   5,   1,  11,   92},  // .
+  {211, 174,  13,  13,  -1,   3,  173},  // +
 };
 static const KGlyph GL_ICON[8] = {
   { 21, 153,  24,  19,   1,   3,    0},  // hr
@@ -239,7 +242,7 @@ static const KGlyph GL_ICON[8] = {
 };
 static const KGlyph GL_MISC[3] = {
   {217, 106,  33,  20,   2,   1,    0},  // batt
-  {217, 174,   4,   3,   5,   9,    0},  // nail
+  {231, 174,   4,   3,   5,   9,    0},  // nail
   {  0,   0, 190,  57,   3,   6,    0},  // board
 };
 #elif defined(PBL_PLATFORM_GABBRO)
@@ -268,7 +271,7 @@ static const KGlyph GL_BIG[11] = {
   {123,  60,  37,  52,   0,   4,  639},  // 9
   {298,  60,  16,  27,   0,  18,  308},  // :
 };
-static const KGlyph GL_SMALL[33] = {
+static const KGlyph GL_SMALL[34] = {
   {187, 140,  16,  17,   0,   2,  275},  // 0
   {138, 140,  10,  18,   0,   1,  175},  // 1
   {264, 140,  12,  17,   1,   2,  212},  // 2
@@ -301,7 +304,8 @@ static const KGlyph GL_SMALL[33] = {
   {  0, 140,  16,  18,   0,   1,  250},  // v
   {224, 113,  19,  18,   0,   1,  312},  // w
   {263, 113,  17,  18,   0,   1,  287},  // y
-  { 50, 159,   6,   6,   0,  12,  100},  // .
+  { 65, 159,   6,   6,   0,  12,  100},  // .
+  { 50, 159,  14,  14,  -1,   3,  187},  // +
 };
 static const KGlyph GL_ICON[8] = {
   {197, 113,  26,  21,   1,   3,    0},  // hr
@@ -315,7 +319,7 @@ static const KGlyph GL_ICON[8] = {
 };
 static const KGlyph GL_MISC[3] = {
   {160, 113,  36,  21,   2,   1,    0},  // batt
-  { 57, 159,   4,   4,   6,  10,    0},  // nail
+  { 72, 159,   4,   4,   6,  10,    0},  // nail
   {  0,   0, 198,  59,   3,   6,    0},  // board
 };
 #endif

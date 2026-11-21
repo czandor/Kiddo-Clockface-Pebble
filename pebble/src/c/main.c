@@ -42,12 +42,12 @@
   // Pebble Time 2 (emery, 200x228, heart-rate sensor)
   #define HAS_HR_SENSOR 1
   #define CORNER_R   16
-  #define TOP_Y      6
+  #define TOP_Y      9
   #define TOP_MARGIN 24
-  #define TIME_Y     24
-  #define DATE_Y     80
-  #define BOARD_Y    110
-  #define BATT_Y     192
+  #define TIME_Y     31
+  #define DATE_Y     90
+  #define BOARD_Y    119
+  #define BATT_Y     198
 #endif
 
 #define BOARD_X ((SCREEN_W - BOARD_W) / 2)
@@ -631,7 +631,8 @@ static void __attribute__((noinline)) draw_battery(GContext *ctx) {
   if (level < 0) level = 0;
   const GColor icon = color_index(BATT_COLORS[s_battery_charging ? 10 : level]);
   draw_glyph(ctx, &GL_MISC[MISC_BATT], SCREEN_W / 2 - BATT_W, BATT_Y, icon);
-  snprintf(s_text, sizeof(s_text), "%d", s_battery);
+  // A trailing '+' while the watch is on the charger (as in Blokk).
+  snprintf(s_text, sizeof(s_text), s_battery_charging ? "%d+" : "%d", s_battery);
   Paint p = text_paint(EL_BATT);
   draw_text(ctx, s_text, false, SCREEN_W / 2 + 2, BATT_Y + (3 * SMALL_BOX + 12) / 25, ALIGN_LEFT, &p);
 }
