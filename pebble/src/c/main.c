@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include "glyphs.h"
+#include "colors.h"
 
 #define SCREEN_W PBL_DISPLAY_WIDTH
 #define SCREEN_H PBL_DISPLAY_HEIGHT
@@ -87,7 +88,7 @@ typedef enum {
 } SlotType;
 
 // Element ids for the random color streams.
-enum { EL_BG = 1, EL_BOARD, EL_WDAY, EL_AMPM, EL_TIME, EL_DATE, EL_BATT, EL_VALUE };
+enum { EL_BG = 1, EL_BOARD, EL_WDAY, EL_AMPM, EL_TIME, EL_DATE, EL_BATT, EL_VALUE, EL_ICON = EL_VALUE + 6 };
 
 typedef struct {
   int version;
@@ -141,39 +142,6 @@ static Settings s_settings = {
 };
 
 static ColorState s_color_state = { .seed = 1, .last_day = -1, .last_hour = -1 };
-
-// Random color pool. Index = 0b00rrggbb.
-#if defined(PBL_PLATFORM_EMERY) || defined(PBL_PLATFORM_GABBRO)
-// Pebble Time 2 and Round 2: the touch layer over the reflective panel makes
-// the picture darker and duller, so only the vivid entries are used: one
-// channel at FF and another at 00 or 55 (29 colors). Pastel, grayish and
-// dark-saturated shades are left out.
-static const uint8_t RANDOM_POOL[] = {
-  7, 11, 12, 13, 14, 15, 19, 23, 27, 28, 29, 30, 31, 35, 39, 44, 45, 48, 49, 50,
-  51, 52, 53, 54, 55, 56, 57, 60, 61
-};
-#else
-// Pebble Time and Time Round: the palette entries enabled in the Fitbit Kiddo
-// color table (no black, white or the darkest shades), 50 colors.
-static const uint8_t RANDOM_POOL[] = {
-  6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 19, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
-  32, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53,
-  54, 55, 56, 57, 58, 59, 60, 61, 62
-};
-#endif
-#define POOL_SIZE ((int)sizeof(RANDOM_POOL))
-
-// Fixed icon colors from the Fitbit source (palette indices).
-static const uint8_t ICON_COLOR[ICON_COUNT] = {
-  48,  // ICON_HR: Red (Light Gray without a reading)
-  11,  // ICON_STEPS: Vivid Cerulean
-  29,  // ICON_ACTIVE: Screamin' Green
-  39,  // ICON_DISTANCE: Lavender Indigo
-  52,  // ICON_CALORIES: Orange
-  60,  // ICON_SLEEP: Yellow (the Fitbit floors color)
-  14,  // ICON_BELL: Medium Spring Green
-  48   // ICON_BELLOFF: Red
-};
 
 // Battery icon colors by charge decade, and while charging (Fitbit drawBatt()).
 static const uint8_t BATT_COLORS[11] = { 32, 48, 52, 56, 60, 44, 29, 28, 12, 8, 23 };
@@ -232,51 +200,78 @@ static uint32_t mix32(uint32_t x) {
   return x;
 }
 
-// Deterministic random color for (seed, element, index), skipping up to three
-// colors (background, board, previous letter). The same seed gives the same
-// colors on every redraw, so the face only changes when the seed changes.
-static GColor random_color(int element, int index, GColor a, GColor b, GColor c) {
-  uint32_t h = mix32(s_color_state.seed ^ ((uint32_t)element * 0x9E3779B9u) ^ ((uint32_t)(index + 1) * 0x85EBCA6Bu));
-  int start = (int)(h % POOL_SIZE);
-  for (int i = 0; i < POOL_SIZE; i++) {
-    GColor col = color_index(RANDOM_POOL[(start + i) % POOL_SIZE]);
-    if (!gcolor_equal(col, a) && !gcolor_equal(col, b) && !gcolor_equal(col, c)) return col;
+// "Very different": CIE76 distance of at least 50 (colors.h). GColorClear
+// means "no constraint".
+static bool far_apart(GColor a, GColor b) {
+  if (gcolor_equal(a, GColorClear) || gcolor_equal(b, GColorClear)) return true;
+  const int8_t *x = COLOR_LAB[a.argb & 0x3F];
+  const int8_t *y = COLOR_LAB[b.argb & 0x3F];
+  const int dl = x[0] - y[0];
+  const int da = x[1] - y[1];
+  const int db = x[2] - y[2];
+  return dl * dl + da * da + db * db >= FAR_DELTA_E2;
+}
+
+// Deterministic random color for (seed, element, index) from a pool: very
+// different from the surface it is drawn on, and not equal to not_a / not_b
+// (the previous letter, the icon next to a number). The same seed gives the
+// same colors on every redraw, so the face only changes when the seed changes.
+static GColor random_color(const uint8_t *pool, int size, int element, int index,
+                           GColor surface, GColor not_a, GColor not_b) {
+  const uint32_t h = mix32(s_color_state.seed ^ ((uint32_t)element * 0x9E3779B9u) ^
+                           ((uint32_t)(index + 1) * 0x85EBCA6Bu));
+  const int start = (int)(h % (uint32_t)size);
+  for (int pass = 0; pass < 2; pass++) {  // the second pass only avoids an exact match
+    for (int i = 0; i < size; i++) {
+      const GColor col = color_index(pool[(start + i) % size]);
+      if (gcolor_equal(col, not_a) || gcolor_equal(col, not_b)) continue;
+      if (pass == 0 ? far_apart(col, surface) : !gcolor_equal(col, surface)) return col;
+    }
   }
   return GColorWhite;
 }
 
+static GColor battery_icon_color(void) {
+  int level = s_battery / 10;
+  if (level > 9) level = 9;
+  if (level < 0) level = 0;
+  return color_index(BATT_COLORS[s_battery_charging ? 10 : level]);
+}
+
+// Background: always vivid, and clearly different from the battery icon on it.
 static GColor bg_color(void) {
   if (s_settings.bg_option == BG_OPTION_FIX) return color_argb(s_settings.bg_color);
-  return random_color(EL_BG, 0, GColorClear, GColorClear, GColorClear);
+  return random_color(VIVID_POOL, VIVID_POOL_SIZE, EL_BG, 0, battery_icon_color(), GColorClear, GColorClear);
 }
 
+// Health board: vivid as well, clearly different from the background.
 static GColor board_color(void) {
   if (s_settings.board_mode == 1) return color_argb(s_settings.board_color);
-  GColor bg = bg_color();
-  return random_color(EL_BOARD, 0, bg, bg, bg);
+  return random_color(VIVID_POOL, VIVID_POOL_SIZE, EL_BOARD, 0, bg_color(), GColorClear, GColorClear);
 }
 
+// Letters, numbers and icons come from every Kiddo color, but only from those
+// clearly different from the surface below them.
 typedef struct {
   uint8_t mode;
   uint8_t element;
   GColor fixed;
-  GColor avoid_a;
-  GColor avoid_b;
+  GColor surface;
+  GColor other;  // a color to skip as well (e.g. the icon next to a number)
 } Paint;
 
 static GColor paint_color(const Paint *p, int i, GColor prev) {
   switch (p->mode) {
     case PAINT_FIXED: return p->fixed;
-    case PAINT_ONE:   return random_color(p->element, 0, p->avoid_a, p->avoid_b, p->avoid_a);
-    default:          return random_color(p->element, i, p->avoid_a, p->avoid_b, prev);
+    case PAINT_ONE:   return random_color(ALL_POOL, ALL_POOL_SIZE, p->element, 0, p->surface, p->other, GColorClear);
+    default:          return random_color(ALL_POOL, ALL_POOL_SIZE, p->element, i, p->surface, prev, p->other);
   }
 }
 
 static Paint text_paint(int element) {
-  GColor bg = bg_color();
   return (Paint){
     .mode = (uint8_t)s_settings.text_mode, .element = (uint8_t)element,
-    .fixed = color_argb(s_settings.text_color), .avoid_a = bg, .avoid_b = bg
+    .fixed = color_argb(s_settings.text_color), .surface = bg_color(), .other = GColorClear
   };
 }
 
@@ -505,14 +500,11 @@ static int clamp_value(int v, int max) {
 }
 
 // Icon and value text of a board slot. Returns false for an empty slot.
-static bool slot_content(int type, int *icon, GColor *icon_color, char *val, size_t val_sz) {
-  *icon_color = color_index(ICON_COLOR[0]);
+static bool slot_content(int type, int *icon, char *val, size_t val_sz) {
   switch (type) {
     case SLOT_HR:
 #if HAS_HR_SENSOR
       *icon = ICON_HR;
-      *icon_color = (s_hr_measurement && s_hr_dim) ? GColorDarkGray
-                  : (s_hr > 0 ? color_index(ICON_COLOR[ICON_HR]) : GColorLightGray);
       if (s_hr > 0) snprintf(val, val_sz, "%d", s_hr);
       else snprintf(val, val_sz, "...");
       return true;
@@ -560,7 +552,6 @@ static bool slot_content(int type, int *icon, GColor *icon_color, char *val, siz
     default:
       return false;
   }
-  *icon_color = color_index(ICON_COLOR[*icon]);
   return true;
 }
 
@@ -619,8 +610,11 @@ static void __attribute__((noinline)) draw_board(GContext *ctx) {
   const int base = s_second_board_shown ? 3 : 0;
   for (int i = 0; i < 3; i++) {
     int icon = 0;
-    GColor icon_color;
-    if (!slot_content(s_settings.slots[base + i], &icon, &icon_color, s_text, sizeof(s_text))) continue;
+    const int type = s_settings.slots[base + i];
+    if (!slot_content(type, &icon, s_text, sizeof(s_text))) continue;
+    // While measuring on demand, the heart blinks dark gray.
+    const GColor icon_color = (type == SLOT_HR && s_hr_measurement && s_hr_dim) ? GColorDarkGray
+      : random_color(ALL_POOL, ALL_POOL_SIZE, EL_ICON + base + i, 0, board, GColorClear, GColorClear);
     const int cx = BOARD_X + col_x[i] * BOARD_W / 300;
     // Side slots: icon above the value; middle slot: value above the icon.
     const int icon_y = BOARD_Y + (i == 1 ? 48 : 18) * BOARD_H / 100;
@@ -630,19 +624,15 @@ static void __attribute__((noinline)) draw_board(GContext *ctx) {
       .mode = s_settings.value_mode == 1 ? PAINT_FIXED : PAINT_ONE,
       .element = (uint8_t)(EL_VALUE + base + i),
       .fixed = color_argb(s_settings.value_color),
-      .avoid_a = board,
-      .avoid_b = icon_color
+      .surface = board,
+      .other = icon_color
     };
     draw_text(ctx, s_text, false, cx, val_y, ALIGN_CENTER, &p);
   }
 }
 
 static void __attribute__((noinline)) draw_battery(GContext *ctx) {
-  int level = s_battery / 10;
-  if (level > 9) level = 9;
-  if (level < 0) level = 0;
-  const GColor icon = color_index(BATT_COLORS[s_battery_charging ? 10 : level]);
-  draw_glyph(ctx, &GL_MISC[MISC_BATT], SCREEN_W / 2 - BATT_W, BATT_Y, icon);
+  draw_glyph(ctx, &GL_MISC[MISC_BATT], SCREEN_W / 2 - BATT_W, BATT_Y, battery_icon_color());
   // A trailing '+' while the watch is on the charger (as in Blokk).
   snprintf(s_text, sizeof(s_text), s_battery_charging ? "%d+" : "%d", s_battery);
   Paint p = text_paint(EL_BATT);

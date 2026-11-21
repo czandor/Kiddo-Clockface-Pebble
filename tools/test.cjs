@@ -49,25 +49,37 @@ for (const w of words) {
   for (const c of w) assert.ok(smallChars.includes(c), `Glyph for "${c}" (${w}) missing`);
 }
 
-// 3b. Random color pools: vivid subset on Pebble Time 2 / Round 2, Fitbit pool elsewhere
+// 3b. Colors: vivid backgrounds/boards everywhere, letters/numbers/icons from all
+// colors but clearly different (CIE76 >= 50) from the surface below them
 {
-  const pools = [...mainC.matchAll(/static const uint8_t RANDOM_POOL\[\] = \{([^}]+)\}/g)]
-    .map((m) => m[1].split(',').map((v) => parseInt(v, 10)).filter((v) => !isNaN(v)));
-  assert.equal(pools.length, 2, 'Two random pools (vivid and Fitbit)');
-  const [vivid, fitbit] = pools;
+  const colorsH = fs.readFileSync(path.join(root, 'pebble/src/c/colors.h'), 'utf8');
+  const list = (name) => /\{([^}]+)\}/.exec(colorsH.slice(colorsH.indexOf(`${name}[`)))[1]
+    .split(',').map((v) => parseInt(v, 10)).filter((v) => !isNaN(v));
+  const vivid = list('VIVID_POOL');
+  const all = list('ALL_POOL');
+  const labs = [...colorsH.slice(colorsH.indexOf('COLOR_LAB')).matchAll(/\{(-?\d+), (-?\d+), (-?\d+)\}/g)]
+    .map((m) => [+m[1], +m[2], +m[3]]);
+  const far2 = +/#define FAR_DELTA_E2 (\d+)/.exec(colorsH)[1];
   const ch = (i) => [(i >> 4) & 3, (i >> 2) & 3, i & 3];
-  assert.equal(vivid.length, 29, 'Vivid pool has 29 colors');
-  assert.equal(new Set(vivid).size, 29);
-  for (const i of vivid) {
-    assert.ok(Math.max(...ch(i)) === 3 && Math.min(...ch(i)) <= 1, `vivid pool entry ${i}`);
-    assert.ok(fitbit.includes(i), `vivid entry ${i} is also in the Fitbit pool`);
+  const isVivid = (i) => Math.max(...ch(i)) === 3 && Math.min(...ch(i)) <= 1;
+  const far = (a, b) => labs[a].reduce((sum, v, k) => sum + (v - labs[b][k]) ** 2, 0) >= far2;
+
+  assert.equal(all.length, 50, 'All Kiddo colors: 50');
+  assert.equal(vivid.length, 29, 'Vivid colors: 29');
+  assert.equal(labs.length, 64, 'Lab table for the 64 Pebble colors');
+  assert.equal(far2, 2500);
+  assert.deepEqual(vivid, all.filter(isVivid), 'Vivid pool = vivid entries of the Kiddo table');
+  assert.deepEqual(labs[0], [0, 0, 0], 'Black');
+  assert.deepEqual(labs[63], [100, 0, 0], 'White');
+  for (const bg of vivid) {
+    const letters = all.filter((c) => far(c, bg)).length;
+    const boards = vivid.filter((c) => far(c, bg)).length;
+    assert.ok(letters >= 30, `bg ${bg}: ${letters} clearly different letter colors`);
+    assert.ok(boards >= 15, `bg ${bg}: ${boards} clearly different board colors`);
   }
-  for (const i of fitbit) {
-    if (Math.max(...ch(i)) === 3 && Math.min(...ch(i)) <= 1) assert.ok(vivid.includes(i), `vivid color ${i} missing`);
-  }
-  assert.equal(fitbit.length, 50, 'Fitbit pool has 50 colors');
-  assert.ok(/#if defined\(PBL_PLATFORM_EMERY\) \|\| defined\(PBL_PLATFORM_GABBRO\)\s*\n\/\/ Pebble Time 2/.test(mainC),
-    'Vivid pool is used on emery and gabbro');
+  assert.ok(mainC.includes('random_color(VIVID_POOL, VIVID_POOL_SIZE, EL_BG'), 'Background from the vivid pool');
+  assert.ok(mainC.includes('random_color(VIVID_POOL, VIVID_POOL_SIZE, EL_BOARD'), 'Board from the vivid pool');
+  assert.ok(!/PBL_PLATFORM_(EMERY|GABBRO)\)[^\n]*\n[^\n]*POOL/.test(mainC), 'Same color rules on every platform');
 }
 
 // 4. companion.js in a mocked Pebble environment

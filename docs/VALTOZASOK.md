@@ -14,4 +14,4 @@
 - Kerek kijelzőn 12 órás módban a nap és az `AM`/`PM` beljebb húzva.
 - Töltés közben `+` jel a százalék mögött.
 - Pebble Time 2-n a felső elemek lejjebb kerültek, a függőleges térközök egyenletesek.
-- Pebble Time 2-n és Round 2-n a véletlen színek csak a 29 élénk palettaszínből jönnek (pasztell, szürkés és sötét árnyalatok nélkül), mert az érintőréteges kijelzőjük sötétebb és fakóbb; Pebble Time-on és Time Roundon marad az eredeti 50 szín.
+- Színszabályok minden órán: a háttér és a tábla mindig a 29 élénk palettaszínből jön (pasztell, szürkés és sötét árnyalatok nélkül). A betűk, táblaszámok és táblaikonok mind az 50 Kiddo-színből jöhetnek, de csak abból, amelyik nagyon eltér az alattuk lévő felülettől (CIE76 ≥ 50). A táblaikonok is véletlen színűek, az akkuikon a töltöttség szerinti színű marad, és a háttér ettől is nagyon eltér.
