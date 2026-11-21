@@ -3,6 +3,7 @@
 ## 1.0.1 (2026-11-21)
 
 - **Build és tesztek:** `tools/build.ps1` sikeres mind a négy platformra (`dist/Kiddo-1.0.1.pbw`), `node tools/test.cjs` sikeres. A támogatási link (`https://czandor.hu/paypal/kiddo`, 301-gyel a `/kiddo/` oldalra visz, mint a Blokké) benne van a PBW `pebble-js-app.js` fájljában (Clay `Support` szakasz). A C kód nem változott.
+- **GitHub-kiadás:** a `v1.0.1` kiadás `Kiddo-1.0.1.pbw` fájlja a `releases/latest/download` linkről letöltve bájtra azonos a `dist/` buildjével (SHA256 `d1f5cab8ebdf53bff0a961f732121a1fd3fb29b3be90b22da1cf90de9e53505f`).
 - **Fizikai órán:** a telefonon keresztül telepítve (`App install succeeded`). A beállítóoldal `Support` szakaszát a telefonon még nem nézte meg senki.
 
 ## 1.0.0 (2026-11-21)
