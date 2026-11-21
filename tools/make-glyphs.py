@@ -46,12 +46,14 @@ ICON_BOX = 35
 BATT_SIZE = (50, 30)
 NAIL_BOX = 20
 
-# Per platform: big digit scale, small text/icon scale, health board size (Fitbit: 300x100).
+# Per platform: big digit scale, small text/icon scale, health board size (Fitbit: 300x100)
+# and the width of the black frame drawn around the board (the original 1 px
+# frame breaks up when scaled down).
 PLATFORMS = {
-    'basalt': dict(big=0.48, small=0.56, board=(140, 50), sheet_w=256),
-    'chalk': dict(big=0.50, small=0.56, board=(136, 48), sheet_w=256),
-    'emery': dict(big=0.66, small=0.72, board=(194, 68), sheet_w=256),
-    'gabbro': dict(big=0.74, small=0.78, board=(202, 70), sheet_w=320),
+    'basalt': dict(big=0.48, small=0.56, board=(140, 50), board_frame=1, sheet_w=256),
+    'chalk': dict(big=0.50, small=0.56, board=(136, 48), board_frame=1, sheet_w=256),
+    'emery': dict(big=0.66, small=0.72, board=(194, 68), board_frame=2, sheet_w=256),
+    'gabbro': dict(big=0.74, small=0.78, board=(202, 70), board_frame=2, sheet_w=320),
 }
 
 MASK_T = 110   # fill where the scaled mask is at least this bright
@@ -143,6 +145,26 @@ def quantize(mask, layer, size):
     return out
 
 
+def add_frame(cells, width):
+    """Pads the cells by `width` and makes every transparent or gray pixel within
+    `width` px (round brush) of the fill black, keeping the existing outline and
+    shadow. Returns the padded cells."""
+    h, w = len(cells), len(cells[0])
+    H, Wd = h + 2 * width, w + 2 * width
+    out = [[T] * Wd for _ in range(H)]
+    for y in range(h):
+        out[y + width][width:width + w] = cells[y]
+    offsets = [(dx, dy) for dy in range(-width, width + 1) for dx in range(-width, width + 1)
+               if dx * dx + dy * dy <= width * width + width]
+    framed = [row[:] for row in out]
+    for y in range(H):
+        for x in range(Wd):
+            if out[y][x] in (T, G) and any(
+                    0 <= x + dx < Wd and 0 <= y + dy < H and out[y + dy][x + dx] == W for dx, dy in offsets):
+                framed[y][x] = K
+    return framed
+
+
 def crop(cells):
     h, w = len(cells), len(cells[0])
     ys = [y for y in range(h) if any(cells[y])]
@@ -180,8 +202,9 @@ def build(platform, cfg):
     nail_px = max(5, round(NAIL_BOX * ss))
     x0, y0, cells = crop(quantize(*load_pair('small/dot'), (nail_px, nail_px)))
     tiles.append(('misc', 'nail', cells, x0, y0, 0))
-    x0, y0, cells = crop(quantize(*load_pair('table'), cfg['board']))
-    tiles.append(('misc', 'board', cells, x0, y0, 0))
+    frame = cfg['board_frame']
+    x0, y0, cells = crop(add_frame(quantize(*load_pair('table'), cfg['board']), frame))
+    tiles.append(('misc', 'board', cells, x0 - frame, y0 - frame, 0))
 
     # Shelf packing, tallest first, 1 px gap.
     sheet_w = cfg['sheet_w']
